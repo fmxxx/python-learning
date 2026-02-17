@@ -1,8 +1,8 @@
+import random, turtle
 from turtle import Turtle, Screen
-import turtle
+from colorsys import hsv_to_rgb
 from lesson18_trinket_colors import trinket_colors
-import tkinter
-import random
+
 
 turtle.colormode(255)
 timmy = Turtle()
@@ -12,6 +12,13 @@ directions = [0, 90, 180, 270]
 
 def random_rgb():
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+
+def random_hsv() -> tuple[float, float, float]:
+    h = random.random()
+    s = 1
+    v = 1
+    return (h, s, v)
 
 
 def square(
@@ -47,22 +54,39 @@ def regular_polygon(turtle_obj: Turtle, side_len: int, sides: int):
 
 
 def random_walk(turtle_obj: Turtle, side_len: int, walks: int):
-
     for i in range(walks + 1):
         turtle_obj.color(random_rgb())
         turtle_obj.right(random.choice(directions))
         turtle_obj.forward(side_len)
 
 
-# dashed_line(timmy, 10, 10, 10)
-# for i in range(3, 10 + 1):
-#    regular_polygon(timmy, 100, i)
+def spirograph(turtle_obj: Turtle, radius: int, turns: int):
+    for _ in range(turns):
+        turtle_obj.circle(radius)
+        turtle_obj.left(360 / turns)
 
-timmy.pensize(10)
+
 timmy.speed("fastest")
-random_walk(timmy, 20, 800)
+
+timmy.pensize(2)
+
+timmy.clear()
+
+for i in range(100):
+    a = random_hsv()
+    a = hsv_to_rgb(*a)
+    b = (int(a[0] * 255), int(a[1] * 255), int(a[2] * 255))
+    timmy.pencolor(b)
+    spirograph(timmy, 150, i)
 
 """
+dashed_line(timmy, 10, 10, 10)
+for i in range(3, 10 + 1):
+    regular_polygon(timmy, 100, i)
+
+timmy.pensize(10)
+random_walk(timmy, 20, 800)
+
 square(timmy, 100, 4, "right")
 timmy.forward(100)
 square(timmy, 100, 3, "left")
