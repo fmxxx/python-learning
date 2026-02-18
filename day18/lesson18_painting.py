@@ -34,7 +34,8 @@ turtle.colormode(255)
 t = turtle.Turtle()
 t.speed("fastest")
 
-t.teleport(-200, 200)
-dot_grid(t, 40, 40, 10, 15, rgb_colors)
+t.teleport(-300, 300)
+dot_grid(t, 20, 20, 10, 15, rgb_colors)
+t.hideturtle()
 
 turtle.exitonclick()
