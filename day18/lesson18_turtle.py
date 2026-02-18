@@ -70,14 +70,14 @@ timmy.speed("fastest")
 
 timmy.pensize(2)
 
-timmy.clear()
 
-for i in range(100):
+for i in range(200):
     a = random_hsv()
     a = hsv_to_rgb(*a)
     b = (int(a[0] * 255), int(a[1] * 255), int(a[2] * 255))
     timmy.pencolor(b)
     spirograph(timmy, 150, i)
+    timmy.clear()
 
 """
 dashed_line(timmy, 10, 10, 10)
