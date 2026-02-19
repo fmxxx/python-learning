@@ -1,12 +1,20 @@
 from turtle import Screen, Turtle, Vec2D
 
-screen = Screen()
-screen.setup(width=800, height=800)
-screen.bgcolor("black")
-screen.title("SNAKE")
-screen.no_animation()
 
-snake: list[Turtle] = []
+def draw_border(width: int, height: int, start_x: int, start_y: int):
+    b = Turtle(visible=False)
+    b.speed("fastest")
+    b.color("White")
+    b.teleport(start_x, start_y)
+    b.pensize(20)
+
+    b.forward(width)
+    b.right(90)
+    b.forward(height)
+    b.right(90)
+    b.forward(width)
+    b.right(90)
+    b.forward(height)
 
 
 def snake_square() -> Turtle:
@@ -71,6 +79,17 @@ def move_snake_e():
 def move_snake_w():
     move_snake("w")
 
+
+# PROGRAM START
+screen = Screen()
+screen.setup(width=800, height=800)
+screen.bgcolor("black")
+screen.title("SNAKE")
+screen.no_animation()
+
+draw_border(780, 780, -392, 392)
+
+snake: list[Turtle] = []
 
 for i in range(3):
     add_tail(snake, "e")
