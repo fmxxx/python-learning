@@ -133,6 +133,7 @@ screen.no_animation()
 screen.tracer(0)
 
 grid_size: int = 20
+game_clock_s: float = 0.1
 
 border_width: int = 800
 border_height: int = 800
@@ -172,7 +173,7 @@ while is_game_on:
         is_food_collected = False
 
     move_snake(direction, heading_map)
-    time.sleep(0.1)
+    time.sleep(game_clock_s)
     screen.update()
     if (
         abs(snake[0].xcor()) == inner_abs_border_x
