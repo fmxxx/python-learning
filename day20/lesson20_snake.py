@@ -30,7 +30,7 @@ def snake_square() -> Turtle:
 
 
 def add_tail(snake: list[Turtle], latest_move: str):
-    lenght = len(snake)
+    lenght: int = len(snake)
 
     s = snake_square()
 
@@ -111,12 +111,12 @@ def fail_state():
 
 
 def spawn_food(
-    food_min_x: int, food_max_x: int, food_min_y: int, food_max_y: int, grid_size
+    food_min_x: int, food_max_x: int, food_min_y: int, food_max_y: int, grid_size: int
 ):
     # TODO calculate x and y so it doesn't intersect with border
     # regardless of sign (- , +) of min and max values
-    food_x = random.randint(food_min_x + 1, food_max_x - 1) * grid_size
-    food_y = random.randint(food_min_y + 1, food_max_y - 1) * grid_size
+    food_x: int = random.randint(food_min_x + 1, food_max_x - 1) * grid_size
+    food_y: int = random.randint(food_min_y + 1, food_max_y - 1) * grid_size
 
     f = Turtle("square")
     f.color("red")
@@ -132,14 +132,14 @@ screen.title("SNAKE")
 screen.no_animation()
 screen.tracer(0)
 
-grid_size = 20
+grid_size: int = 20
 
-border_width = 800
-border_height = 800
-border_start_x = -400
-border_start_y = 400
-inner_abs_border_x = abs(border_start_x)
-inner_abs_border_y = abs(border_start_y)
+border_width: int = 800
+border_height: int = 800
+border_start_x: int = -400
+border_start_y: int = 400
+inner_abs_border_x: int = abs(border_start_x)
+inner_abs_border_y: int = abs(border_start_y)
 border = draw_border(
     border_width, border_height, border_start_x, border_start_y, "gray", grid_size
 )
@@ -160,8 +160,8 @@ screen.onkey(key="a", fun=set_direction_w)
 screen.onkey(key="d", fun=set_direction_e)
 
 
-is_game_on = True
-is_food_collected = True
+is_game_on: bool = True
+is_food_collected: bool = True
 direction: str = "e"
 
 while is_game_on:
