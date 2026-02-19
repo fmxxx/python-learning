@@ -2,10 +2,10 @@ from turtle import Screen, Turtle, Vec2D
 import random, time
 
 
-def draw_border(width: int, height: int, start_x: int, start_y: int):
+def draw_border(width: int, height: int, start_x: int, start_y: int, color: str):
     b = Turtle(visible=False)
     b.speed("fastest")
-    b.color("gray")
+    b.color(color)
     b.teleport(start_x, start_y)
     b.pensize(20)
 
@@ -16,6 +16,8 @@ def draw_border(width: int, height: int, start_x: int, start_y: int):
     b.forward(width)
     b.right(90)
     b.forward(height)
+
+    return b
 
 
 def snake_square() -> Turtle:
@@ -87,6 +89,10 @@ def set_direction_w():
     direction = "w"
 
 
+def fail_state():
+    return False
+
+
 # PROGRAM START
 screen = Screen()
 screen.setup(width=850, height=850)
@@ -95,7 +101,11 @@ screen.title("SNAKE")
 screen.no_animation()
 screen.tracer(0)
 
-draw_border(780, 780, -400, 400)
+border_start_x = -400
+border_start_y = 400
+inner_abs_border_x = abs(border_start_x) - 20
+inner_abs_border_y = abs(border_start_y) - 20
+border = draw_border(780, 780, border_start_x, border_start_y, "gray")
 
 snake: list[Turtle] = []
 
@@ -118,5 +128,12 @@ while is_game_on:
     move_snake(direction)
     time.sleep(0.1)
     screen.update()
+    if (
+        abs(snake[0].xcor()) == inner_abs_border_x
+        or abs(snake[0].ycor()) == inner_abs_border_y
+    ):
+        is_game_on = fail_state()
+        border = draw_border(780, 780, border_start_x, border_start_y, "red")
+        screen.update()
 
 screen.exitonclick()
