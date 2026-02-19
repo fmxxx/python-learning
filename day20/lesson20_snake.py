@@ -48,9 +48,20 @@ def add_tail(snake: list[Turtle], latest_move: str):
         snake.append(s)
 
 
-def move_snake(direction: str):
-    assert direction in ["n", "s", "e", "w"]
+def move_snake(direction: str, heading_map: dict[str, int]):
+    assert direction in ["e", "n", "w", "s"]
 
+    # Prevent turning 180deg
+    if snake[0].heading() == heading_map["e"] and direction == "w":
+        direction = "e"
+    if snake[0].heading() == heading_map["n"] and direction == "s":
+        direction = "n"
+    if snake[0].heading() == heading_map["w"] and direction == "e":
+        direction = "w"
+    if snake[0].heading() == heading_map["s"] and direction == "n":
+        direction = "s"
+
+    # Move head
     next_pos: Vec2D = snake[0].pos()
 
     if direction == "e":
@@ -62,6 +73,9 @@ def move_snake(direction: str):
     if direction == "s":
         snake[0].teleport(x=next_pos[0], y=next_pos[1] - 20)
 
+    snake[0].setheading(heading_map[direction])
+
+    # Update Tail
     for i, square in enumerate(snake[:-1]):
         i = i + 1
         next_next_pos: Vec2D = snake[i].pos()
@@ -69,6 +83,7 @@ def move_snake(direction: str):
         next_pos = next_next_pos
 
     screen.update()
+    return
 
 
 def set_direction_n():
@@ -129,6 +144,8 @@ border = draw_border(
     border_width, border_height, border_start_x, border_start_y, "gray", grid_size
 )
 
+heading_map: dict[str, int] = {"e": 0, "n": 90, "w": 180, "s": 270}
+
 snake: list[Turtle] = []
 
 for i in range(3):
@@ -154,7 +171,7 @@ while is_game_on:
         spawn_food(-20, 20, -20, 20, grid_size)
         is_food_collected = False
 
-    move_snake(direction)
+    move_snake(direction, heading_map)
     time.sleep(0.1)
     screen.update()
     if (
