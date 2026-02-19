@@ -101,11 +101,15 @@ screen.title("SNAKE")
 screen.no_animation()
 screen.tracer(0)
 
+border_width = 800
+border_height = 800
 border_start_x = -400
 border_start_y = 400
-inner_abs_border_x = abs(border_start_x) - 20
-inner_abs_border_y = abs(border_start_y) - 20
-border = draw_border(780, 780, border_start_x, border_start_y, "gray")
+inner_abs_border_x = abs(border_start_x)
+inner_abs_border_y = abs(border_start_y)
+border = draw_border(
+    border_width, border_height, border_start_x, border_start_y, "gray"
+)
 
 snake: list[Turtle] = []
 
@@ -133,7 +137,9 @@ while is_game_on:
         or abs(snake[0].ycor()) == inner_abs_border_y
     ):
         is_game_on = fail_state()
-        border = draw_border(780, 780, border_start_x, border_start_y, "red")
+        border = draw_border(
+            border_width, border_height, border_start_x, border_start_y, "red"
+        )
         screen.update()
 
 screen.exitonclick()
