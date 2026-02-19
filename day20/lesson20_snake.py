@@ -1,10 +1,11 @@
 from turtle import Screen, Turtle, Vec2D
+import random, time
 
 
 def draw_border(width: int, height: int, start_x: int, start_y: int):
     b = Turtle(visible=False)
     b.speed("fastest")
-    b.color("White")
+    b.color("gray")
     b.teleport(start_x, start_y)
     b.pensize(20)
 
@@ -26,8 +27,8 @@ def snake_square() -> Turtle:
 
 def add_tail(snake, latest_move):
     lenght = len(snake)
+
     s = snake_square()
-    print(lenght)
 
     if lenght == 0:
         snake.append(s)
@@ -63,44 +64,59 @@ def move_snake(direction):
         snake[i].teleport(x=next_pos[0], y=next_pos[1])
         next_pos = next_next_pos
 
-
-def move_snake_n():
-    move_snake("n")
+    screen.update()
 
 
-def move_snake_s():
-    move_snake("s")
+def set_direction_n():
+    global direction
+    direction = "n"
 
 
-def move_snake_e():
-    move_snake("e")
+def set_direction_s():
+    global direction
+    direction = "s"
 
 
-def move_snake_w():
-    move_snake("w")
+def set_direction_e():
+    global direction
+    direction = "e"
+
+
+def set_direction_w():
+    global direction
+    direction = "w"
 
 
 # PROGRAM START
 screen = Screen()
-screen.setup(width=800, height=800)
+screen.setup(width=850, height=850)
 screen.bgcolor("black")
 screen.title("SNAKE")
 screen.no_animation()
+screen.tracer(0)
 
-draw_border(780, 780, -392, 392)
+draw_border(780, 780, -400, 400)
 
 snake: list[Turtle] = []
 
 for i in range(3):
     add_tail(snake, "e")
 
-for square in snake:
-    square.speed(1)
+screen.update()
 
 screen.listen()
-screen.onkey(key="w", fun=move_snake_n)
-screen.onkey(key="s", fun=move_snake_s)
-screen.onkey(key="a", fun=move_snake_w)
-screen.onkey(key="d", fun=move_snake_e)
+screen.onkey(key="w", fun=set_direction_n)
+screen.onkey(key="s", fun=set_direction_s)
+screen.onkey(key="a", fun=set_direction_w)
+screen.onkey(key="d", fun=set_direction_e)
+
+
+is_game_on = True
+direction: str = "e"
+
+while is_game_on:
+    move_snake(direction)
+    time.sleep(0.1)
+    screen.update()
 
 screen.exitonclick()
