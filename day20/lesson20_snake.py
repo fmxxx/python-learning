@@ -48,7 +48,7 @@ def add_tail(snake: list[Turtle], latest_move: str):
         snake.append(s)
 
 
-def move_snake(direction: str, heading_map: dict[str, int]):
+def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
     assert direction in ["e", "n", "w", "s"]
 
     # Prevent turning 180deg
@@ -65,13 +65,13 @@ def move_snake(direction: str, heading_map: dict[str, int]):
     next_pos: Vec2D = snake[0].pos()
 
     if direction == "e":
-        snake[0].teleport(x=next_pos[0] + 20, y=next_pos[1])
+        snake[0].teleport(x=next_pos[0] + grid_size, y=next_pos[1])
     if direction == "n":
-        snake[0].teleport(x=next_pos[0], y=next_pos[1] + 20)
+        snake[0].teleport(x=next_pos[0], y=next_pos[1] + grid_size)
     if direction == "w":
-        snake[0].teleport(x=next_pos[0] - 20, y=next_pos[1])
+        snake[0].teleport(x=next_pos[0] - grid_size, y=next_pos[1])
     if direction == "s":
-        snake[0].teleport(x=next_pos[0], y=next_pos[1] - 20)
+        snake[0].teleport(x=next_pos[0], y=next_pos[1] - grid_size)
 
     snake[0].setheading(heading_map[direction])
 
@@ -172,7 +172,7 @@ while is_game_on:
         spawn_food(-20, 20, -20, 20, grid_size)
         is_food_collected = False
 
-    move_snake(direction, heading_map)
+    move_snake(direction, heading_map, grid_size)
     time.sleep(game_clock_s)
     screen.update()
     if (
