@@ -2,12 +2,14 @@ from turtle import Screen, Turtle, Vec2D
 import random, time
 
 
-def draw_border(width: int, height: int, start_x: int, start_y: int, color: str):
+def draw_border(
+    width: int, height: int, start_x: int, start_y: int, color: str, grid_size: int
+):
     b = Turtle(visible=False)
     b.speed("fastest")
     b.color(color)
     b.teleport(start_x, start_y)
-    b.pensize(20)
+    b.pensize(grid_size)
 
     b.forward(width)
     b.right(90)
@@ -27,7 +29,7 @@ def snake_square() -> Turtle:
     return s
 
 
-def add_tail(snake, latest_move):
+def add_tail(snake: list[Turtle], latest_move: str):
     lenght = len(snake)
 
     s = snake_square()
@@ -46,7 +48,7 @@ def add_tail(snake, latest_move):
         snake.append(s)
 
 
-def move_snake(direction):
+def move_snake(direction: str):
     assert direction in ["n", "s", "e", "w"]
 
     next_pos: Vec2D = snake[0].pos()
@@ -93,7 +95,9 @@ def fail_state():
     return False
 
 
-def spawn_food(food_min_x, food_max_x, food_min_y, food_max_y, grid_size):
+def spawn_food(
+    food_min_x: int, food_max_x: int, food_min_y: int, food_max_y: int, grid_size
+):
     # TODO calculate x and y so it doesn't intersect with border
     # regardless of sign (- , +) of min and max values
     food_x = random.randint(food_min_x + 1, food_max_x - 1) * grid_size
@@ -122,7 +126,7 @@ border_start_y = 400
 inner_abs_border_x = abs(border_start_x)
 inner_abs_border_y = abs(border_start_y)
 border = draw_border(
-    border_width, border_height, border_start_x, border_start_y, "gray"
+    border_width, border_height, border_start_x, border_start_y, "gray", grid_size
 )
 
 snake: list[Turtle] = []
@@ -159,7 +163,12 @@ while is_game_on:
     ):
         is_game_on = fail_state()
         border = draw_border(
-            border_width, border_height, border_start_x, border_start_y, "red"
+            border_width,
+            border_height,
+            border_start_x,
+            border_start_y,
+            "red",
+            grid_size,
         )
         screen.update()
 
