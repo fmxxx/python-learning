@@ -93,6 +93,18 @@ def fail_state():
     return False
 
 
+def spawn_food(food_min_x, food_max_x, food_min_y, food_max_y, grid_size):
+    # TODO calculate x and y so it doesn't intersect with border
+    # regardless of sign (- , +) of min and max values
+    food_x = random.randint(food_min_x + 1, food_max_x - 1) * grid_size
+    food_y = random.randint(food_min_y + 1, food_max_y - 1) * grid_size
+
+    f = Turtle("square")
+    f.color("red")
+    f.penup()
+    f.teleport(x=food_x, y=food_y)
+
+
 # PROGRAM START
 screen = Screen()
 screen.setup(width=850, height=850)
@@ -100,6 +112,8 @@ screen.bgcolor("black")
 screen.title("SNAKE")
 screen.no_animation()
 screen.tracer(0)
+
+grid_size = 20
 
 border_width = 800
 border_height = 800
@@ -126,9 +140,16 @@ screen.onkey(key="d", fun=set_direction_e)
 
 
 is_game_on = True
+is_food_collected = True
 direction: str = "e"
 
 while is_game_on:
+    if is_food_collected:
+        # TODO change it to calculate based on border size and starting pos
+        # and divide by 20 (pixel size)
+        spawn_food(-20, 20, -20, 20, grid_size)
+        is_food_collected = False
+
     move_snake(direction)
     time.sleep(0.1)
     screen.update()
