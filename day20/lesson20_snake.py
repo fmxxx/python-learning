@@ -61,26 +61,15 @@ def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
     if snake[0].heading() == heading_map["s"] and direction == "n":
         direction = "s"
 
+    # Move tail, position of previous = position of next
+    for i in range(len(snake) - 1, 0, -1):
+        new_x: float = snake[i - 1].xcor()
+        new_y: float = snake[i - 1].ycor()
+
+        snake[i].teleport(x=new_x, y=new_y)
     # Move head
-    next_pos: Vec2D = snake[0].pos()
-
-    if direction == "e":
-        snake[0].teleport(x=next_pos[0] + grid_size, y=next_pos[1])
-    if direction == "n":
-        snake[0].teleport(x=next_pos[0], y=next_pos[1] + grid_size)
-    if direction == "w":
-        snake[0].teleport(x=next_pos[0] - grid_size, y=next_pos[1])
-    if direction == "s":
-        snake[0].teleport(x=next_pos[0], y=next_pos[1] - grid_size)
-
     snake[0].setheading(heading_map[direction])
-
-    # Update Tail
-    for i, square in enumerate(snake[:-1]):
-        i = i + 1
-        next_next_pos: Vec2D = snake[i].pos()
-        snake[i].teleport(x=next_pos[0], y=next_pos[1])
-        next_pos = next_next_pos
+    snake[0].forward(grid_size)
 
     screen.update()
     return
