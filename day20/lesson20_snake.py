@@ -51,16 +51,6 @@ def add_tail(snake: list[Turtle]):
 def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
     assert direction in ["e", "n", "w", "s"]
 
-    # Prevent turning 180deg
-    if snake[0].heading() == heading_map["e"] and direction == "w":
-        direction = "e"
-    if snake[0].heading() == heading_map["n"] and direction == "s":
-        direction = "n"
-    if snake[0].heading() == heading_map["w"] and direction == "e":
-        direction = "w"
-    if snake[0].heading() == heading_map["s"] and direction == "n":
-        direction = "s"
-
     # Move tail, position of previous = position of next
     for i in range(len(snake) - 1, 0, -1):
         new_x: float = snake[i - 1].xcor()
@@ -83,23 +73,27 @@ def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
 
 
 def set_direction_n():
-    global direction
-    direction = "n"
+    if not snake[0].heading() == heading_map["s"]:
+        global direction
+        direction = "n"
 
 
 def set_direction_s():
-    global direction
-    direction = "s"
+    if not snake[0].heading() == heading_map["n"]:
+        global direction
+        direction = "s"
 
 
 def set_direction_e():
-    global direction
-    direction = "e"
+    if not snake[0].heading() == heading_map["w"]:
+        global direction
+        direction = "e"
 
 
 def set_direction_w():
-    global direction
-    direction = "w"
+    if not snake[0].heading() == heading_map["e"]:
+        global direction
+        direction = "w"
 
 
 def fail_state():
