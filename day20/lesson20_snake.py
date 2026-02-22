@@ -69,9 +69,7 @@ def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
         snake[i].teleport(x=new_x, y=new_y)
     # Move head
     snake[0].setheading(heading_map[direction])
-    snake[0].forward(grid_size)
 
-    """
     if snake[0].heading() == 0.0:
         snake[0].teleport(snake[0].xcor() + grid_size, snake[0].ycor())
     if snake[0].heading() == 90.0:
@@ -80,7 +78,6 @@ def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
         snake[0].teleport(snake[0].xcor() - grid_size, snake[0].ycor())
     if snake[0].heading() == 270.0:
         snake[0].teleport(snake[0].xcor(), snake[0].ycor() - grid_size)
-        """
 
     return
 
@@ -155,28 +152,25 @@ border = draw_border(
 
 heading_map: dict[str, int] = {"e": 0, "n": 90, "w": 180, "s": 270}
 
-snake: list[Turtle] = []
-
-for i in range(3):
-    add_tail(snake)
-
 screen.listen()
 screen.onkey(key="w", fun=set_direction_n)
 screen.onkey(key="s", fun=set_direction_s)
 screen.onkey(key="a", fun=set_direction_w)
 screen.onkey(key="d", fun=set_direction_e)
 
+snake: list[Turtle] = []
+for i in range(3):
+    add_tail(snake)
 
-is_game_on: bool = True
-
-direction: str = "e"
-
-food = spawn_food()
-new_pos = random_food_pos(-20, 20, -20, 20, grid_size)
+food: Turtle = spawn_food()
+new_pos: tuple[float, float] = random_food_pos(-20, 20, -20, 20, grid_size)
 food.teleport(x=new_pos[0], y=new_pos[1])
 
-while is_game_on:
+direction: str = "e"
+is_game_on: bool = True
 
+while is_game_on:
+    # Check Border collision
     if (
         abs(snake[0].xcor()) == inner_abs_border_x
         or abs(snake[0].ycor()) == inner_abs_border_y
@@ -192,6 +186,7 @@ while is_game_on:
         )
         screen.update()
 
+    # Check if food is eaten
     if snake[0].xcor() == food.xcor() and snake[0].ycor() == food.ycor():
         add_tail(snake)
         # TODO change it to calculate based on border size and starting pos
