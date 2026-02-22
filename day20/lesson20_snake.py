@@ -29,7 +29,7 @@ def snake_square() -> Turtle:
     return s
 
 
-def add_tail(snake: list[Turtle], latest_move: str):
+def add_tail(snake: list[Turtle]):
     lenght: int = len(snake)
 
     s = snake_square()
@@ -37,13 +37,13 @@ def add_tail(snake: list[Turtle], latest_move: str):
     if lenght == 0:
         snake.append(s)
     else:
-        if latest_move == "e":
+        if snake[0].heading == 0:
             s.teleport(-20 * lenght, 0)
-        if latest_move == "n":
+        if snake[0].heading == 90:
             s.teleport(0, -20 * lenght)
-        if latest_move == "w":
+        if snake[0].heading == 180:
             s.teleport(20 * lenght, 0)
-        if latest_move == "s":
+        if snake[0].heading == 270:
             s.teleport(0, 20 * lenght)
         snake.append(s)
 
@@ -71,7 +71,17 @@ def move_snake(direction: str, heading_map: dict[str, int], grid_size: int):
     snake[0].setheading(heading_map[direction])
     snake[0].forward(grid_size)
 
-    screen.update()
+    """
+    if snake[0].heading() == 0.0:
+        snake[0].teleport(snake[0].xcor() + grid_size, snake[0].ycor())
+    if snake[0].heading() == 90.0:
+        snake[0].teleport(snake[0].xcor(), snake[0].ycor() + grid_size)
+    if snake[0].heading() == 180.0:
+        snake[0].teleport(snake[0].xcor() - grid_size, snake[0].ycor())
+    if snake[0].heading() == 270.0:
+        snake[0].teleport(snake[0].xcor(), snake[0].ycor() - grid_size)
+        """
+
     return
 
 
@@ -99,18 +109,27 @@ def fail_state():
     return False
 
 
-def spawn_food(
-    food_min_x: int, food_max_x: int, food_min_y: int, food_max_y: int, grid_size: int
-):
-    # TODO calculate x and y so it doesn't intersect with border
-    # regardless of sign (- , +) of min and max values
-    food_x: int = random.randint(food_min_x + 1, food_max_x - 1) * grid_size
-    food_y: int = random.randint(food_min_y + 1, food_max_y - 1) * grid_size
-
+def spawn_food() -> Turtle:
     f = Turtle("square")
     f.color("red")
     f.penup()
-    f.teleport(x=food_x, y=food_y)
+
+    return f
+
+
+def random_food_pos(
+    food_min_x: int,
+    food_max_x: int,
+    food_min_y: int,
+    food_max_y: int,
+    grid_size: int,
+) -> tuple[float, float]:
+    # TODO calculate x and y so it doesn't intersect with border
+    # regardless of sign (- , +) of min and max values
+    food_x: float = float(random.randint(food_min_x + 1, food_max_x - 1) * grid_size)
+    food_y: float = float(random.randint(food_min_y + 1, food_max_y - 1) * grid_size)
+
+    return (food_x, food_y)
 
 
 # PROGRAM START
@@ -139,9 +158,7 @@ heading_map: dict[str, int] = {"e": 0, "n": 90, "w": 180, "s": 270}
 snake: list[Turtle] = []
 
 for i in range(3):
-    add_tail(snake, "e")
-
-screen.update()
+    add_tail(snake)
 
 screen.listen()
 screen.onkey(key="w", fun=set_direction_n)
@@ -151,19 +168,15 @@ screen.onkey(key="d", fun=set_direction_e)
 
 
 is_game_on: bool = True
-is_food_collected: bool = True
+
 direction: str = "e"
 
-while is_game_on:
-    if is_food_collected:
-        # TODO change it to calculate based on border size and starting pos
-        # and divide by 20 (pixel size)
-        spawn_food(-20, 20, -20, 20, grid_size)
-        is_food_collected = False
+food = spawn_food()
+new_pos = random_food_pos(-20, 20, -20, 20, grid_size)
+food.teleport(x=new_pos[0], y=new_pos[1])
 
-    move_snake(direction, heading_map, grid_size)
-    time.sleep(game_clock_s)
-    screen.update()
+while is_game_on:
+
     if (
         abs(snake[0].xcor()) == inner_abs_border_x
         or abs(snake[0].ycor()) == inner_abs_border_y
@@ -178,5 +191,17 @@ while is_game_on:
             grid_size,
         )
         screen.update()
+
+    if snake[0].xcor() == food.xcor() and snake[0].ycor() == food.ycor():
+        add_tail(snake)
+        # TODO change it to calculate based on border size and starting pos
+        # and divide by 20 (pixel size)
+        new_pos = random_food_pos(-20, 20, -20, 20, grid_size)
+        food.teleport(x=new_pos[0], y=new_pos[1])
+
+    move_snake(direction, heading_map, grid_size)
+    time.sleep(game_clock_s)
+    screen.update()
+
 
 screen.exitonclick()
