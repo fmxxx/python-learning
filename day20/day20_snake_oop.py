@@ -1,13 +1,38 @@
 from turtle import Screen, Turtle, Vec2D
 import random, time
 
-
+# TODO: Initialize the atributes by passing them in the init method, instead
+# of setting them after using the init method.
 class Snake_Squares(Turtle):
     def __init__(self) -> None:
         super().__init__()
         self.shape("square")
         self.color("white")
         self.penup()
+
+
+class Food(Turtle):
+    def __init__(self) -> None:
+        super().__init__()
+        self.shape("square")
+        self.color("red")
+        self.penup()
+
+
+    def set_random_pos(self,
+        food_min_x: int,
+        food_max_x: int,
+        food_min_y: int,
+        food_max_y: int,
+        grid_size: int,
+    ) -> None:
+        # TODO calculate x and y so it doesn't intersect with border
+        # regardless of sign (- , +) of min and max values
+        food_x: float = float(random.randint(food_min_x + 1, food_max_x - 1) * grid_size)
+        food_y: float = float(random.randint(food_min_y + 1, food_max_y - 1) * grid_size)
+
+        self.teleport(food_x, food_y)
+
 
 class Snake(Turtle):
     def __init__(self) -> None:
@@ -118,29 +143,6 @@ def fail_state():
     return False
 
 
-def spawn_food() -> Turtle:
-    f = Turtle("square")
-    f.color("red")
-    f.penup()
-
-    return f
-
-
-def random_food_pos(
-    food_min_x: int,
-    food_max_x: int,
-    food_min_y: int,
-    food_max_y: int,
-    grid_size: int,
-) -> tuple[float, float]:
-    # TODO calculate x and y so it doesn't intersect with border
-    # regardless of sign (- , +) of min and max values
-    food_x: float = float(random.randint(food_min_x + 1, food_max_x - 1) * grid_size)
-    food_y: float = float(random.randint(food_min_y + 1, food_max_y - 1) * grid_size)
-
-    return (food_x, food_y)
-
-
 # PROGRAM START
 screen = Screen()
 screen.setup(width=850, height=850)
@@ -171,9 +173,8 @@ screen.onkey(key="a", fun=player_snake.set_dir_w)
 screen.onkey(key="d", fun=player_snake.set_dir_e)
 
 
-food: Turtle = spawn_food()
-new_pos: tuple[float, float] = random_food_pos(-20, 20, -20, 20, grid_size)
-food.teleport(x=new_pos[0], y=new_pos[1])
+food = Food()
+food.set_random_pos(-20, 20, -20, 20, grid_size)
 
 direction: str = "e"
 is_game_on: bool = True
@@ -199,9 +200,8 @@ while is_game_on:
     if player_snake.has_touched_food(food):
         # TODO change it to calculate based on border size and starting pos
         # and divide by 20 (pixel size)
-        new_pos = random_food_pos(-20, 20, -20, 20, grid_size)
-        food.teleport(x=new_pos[0], y=new_pos[1])
+        food.set_random_pos(-20, 20, -20, 20, grid_size)
 
     time.sleep(game_clock_s)
-    
+
 screen.exitonclick()
