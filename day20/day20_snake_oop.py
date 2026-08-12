@@ -35,9 +35,12 @@ class Food(Turtle):
 
 
 class Snake(Turtle):
+    default_direction = "e"
+
     def __init__(self) -> None:
         super().__init__()
 
+        self.direction = self.default_direction
         self.body: list[Snake_Squares] = []
         for i in range(3):
             self.grow_tail()
@@ -60,8 +63,11 @@ class Snake(Turtle):
                 s.teleport(0, 20 * lenght)
             self.body.append(s)
 
-    def move(self, direction, heading_map, grid_size):
-        assert direction in ["e", "n", "w", "s"]
+    def move(
+        self,
+        heading_map,
+        grid_size):
+        assert self.direction in ["e", "n", "w", "s"]
 
         # Move tail, position of previous = position of next
         for i in range(len(self.body) - 1, 0, -1):
@@ -70,7 +76,7 @@ class Snake(Turtle):
 
             self.body[i].teleport(x=new_x, y=new_y)
         # Move head
-        self.body[0].setheading(heading_map[direction])
+        self.body[0].setheading(heading_map[self.direction])
 
         if self.body[0].heading() == 0.0:
             self.body[0].teleport(self.body[0].xcor() + grid_size, self.body[0].ycor())
@@ -89,9 +95,9 @@ class Snake(Turtle):
             return True
         else:
             return False
-        
+
     def has_touched_food(self, food):
-                         
+
         if player_snake.body[0].xcor() == food.xcor() and player_snake.body[0].ycor() == food.ycor():
             player_snake.grow_tail()
             return True
@@ -100,23 +106,19 @@ class Snake(Turtle):
 
     def set_dir_n(self):
         if not self.body[0].heading() == heading_map["s"]:
-            global direction
-            direction = "n"
+            self.direction = "n"
 
     def set_dir_s(self):
         if not self.body[0].heading() == heading_map["n"]:
-            global direction
-            direction = "s"
+            self.direction = "s"
 
     def set_dir_e(self):
         if not self.body[0].heading() == heading_map["w"]:
-            global direction
-            direction = "e"
+            self.direction = "e"
 
     def set_dir_w(self):
         if not self.body[0].heading() == heading_map["e"]:
-            global direction
-            direction = "w"
+            self.direction = "w"
 
 
 def draw_border(
@@ -176,11 +178,10 @@ screen.onkey(key="d", fun=player_snake.set_dir_e)
 food = Food()
 food.set_random_pos(-20, 20, -20, 20, grid_size)
 
-direction: str = "e"
 is_game_on: bool = True
 
 while is_game_on:
-    player_snake.move(direction, heading_map, grid_size)
+    player_snake.move(heading_map, grid_size)
     screen.update()
 
     # Check Border collision
