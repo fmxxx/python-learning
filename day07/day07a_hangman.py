@@ -1,5 +1,5 @@
 import random
-from lesson07words import words
+from day07words import words
 
 # sets variables
 picked_word = str(random.choice(words))

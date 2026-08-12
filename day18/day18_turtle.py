@@ -1,7 +1,7 @@
 import random, turtle
 from turtle import Turtle, Screen
 from colorsys import hsv_to_rgb
-from lesson18_trinket_colors import trinket_colors
+from day18_trinket_colors import trinket_colors
 
 
 turtle.colormode(255)

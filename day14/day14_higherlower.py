@@ -1,10 +1,10 @@
 import random
-import lesson14_gamedata
+import day14_gamedata
 
 
 def get_random_data():
-    list_range = len(lesson14_gamedata.data) - 1
-    return lesson14_gamedata.data[random.randint(0, list_range)]
+    list_range = len(day14_gamedata.data) - 1
+    return day14_gamedata.data[random.randint(0, list_range)]
 
 
 def display_option(option_display):
